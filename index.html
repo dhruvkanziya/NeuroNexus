@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental Inquiry Form</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #ff4d30;
+            --primary-hover: #fa3817;
+            --secondary: #010103;
+            --text-dark: #010103;
+            --text-light: #706f7b;
+            --gray-1: #f8f8f8;
+            --gray-2: #e9e9e9;
+            --white: #ffffff;
+            --section-bg: #f8f8f8;
+            --shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Animated Background */
+        .animated-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: -2;
+            background: linear-gradient(-45deg, #ff4d3022, #2c2c5422, #ff4d3022, #2c2c5422);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Car Showcase Panel */
+        .car-showcase {
+            flex: 0 0 50%;
+            background-color: var(--secondary);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem;
+        }
+        
+        .car-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 100%);
+            z-index: 1;
+        }
+        
+        .car-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/1000/800') center/cover no-repeat;
+            opacity: 0.4;
+            z-index: 0;
+            animation: subtle-zoom 20s infinite alternate;
+        }
+        
+        @keyframes subtle-zoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .car-content {
+            position: relative;
+            z-index: 2;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+        
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            animation: slideUp 0.8s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+        
+        .car-description {
+            margin: 2rem 0;
+            animation: slideUp 0.8s ease forwards;
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+        
+        .car-features {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+            margin: 2rem 0;
+            animation: slideUp 0.8s ease forwards;
+            animation-delay: 0.9s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .car-features h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .car-features h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .features-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.7rem;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            margin-right: 10px;
+            font-size: 0.8rem;
+        }
+        
+        /* Form Container */
+        .form-container {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--white);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-wrapper {
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .form-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), #ff8964);
+        }
+        
+        .form-wrapper::after {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            opacity: 0.05;
+            border-radius: 50%;
+            bottom: -100px;
+            right: -100px;
+            z-index: -1;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-title {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .form-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .form-subtitle {
+            color: var(--text-light);
+            margin-top: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus + label,
+        .form-group textarea:focus + label,
+        .form-group select:focus + label {
+            color: var(--primary);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--gray-1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--white);
+            box-shadow: 0 0 0 4px rgba(255, 77, 48, 0.1);
+        }
+        
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #b9b9b9;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .radio-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .required::after {
+            content: "*";
+            color: var(--primary);
+            margin-left: 3px;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(to right, var(--primary), #ff7a57);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(255, 77, 48, 0.3);
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #ff7a57, var(--primary));
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 77, 48, 0.4);
+        }
+        
+        .submit-btn:hover::before {
+            left: 0;
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(255, 77, 48, 0.4);
+        }
+        
+        /* Form Footer */
+        .form-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Car Animation */
+        .car-animation {
+            position: absolute;
+            bottom: 20px;
+            left: -120px;
+            width: 100px;
+            animation: driveCar 15s linear infinite;
+            z-index: 3;
+        }
+        
+        /* Floating Elements */
+        .floating-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 77, 48, 0.03);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            top: -150px;
+            right: -150px;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .circle-2 {
+            bottom: -100px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        
+        /* Pulse animation for CTA */
+        .cta-pulse {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 0 0 rgba(255, 77, 48, 0.7);
+            z-index: 10;
+        }
+        
+        /* Dashboard elements */
+        .dashboard {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 5;
+        }
+        
+        .dash-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .dash-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 77, 48, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 77, 48, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 77, 48, 0);
+            }
+        }
+        
+        @keyframes driveCar {
+            0% {
+                left: -120px;
+                transform: translateX(0);
+            }
+            100% {
+                left: 100%;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .car-showcase {
+                flex: 0 0 auto;
+                min-height: 50vh;
+                padding: 2rem;
+            }
+            
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .form-wrapper {
+                padding: 1.5rem;
+                border-radius: 12px;
+            }
+            
+            .car-features {
+                padding: 1.5rem;
+            }
+            
+            .cta-pulse {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Animated Background -->
+        <div class="animated-bg"></div>
+        
+        <!-- Floating design elements -->
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        
+        <!-- Car Showcase Panel -->
+        <div class="car-showcase">
+            <div class="car-overlay"></div>
+            <div class="car-bg-image"></div>
+            
+            <div class="car-content">
+                <div class="logo-container">
+                    <h1 class="logo">Drive<span>X</span></h1>
+                    <p class="tagline">Luxury & Comfort on Wheels</p>
+                </div>
+                
+                <div class="car-description">
+                    <p>Experience the ultimate in car rental services with our premium fleet. From economy cars to luxury sedans, we have the perfect vehicle for your needs.</p>
+                </div>
+                
+                <div class="car-features">
+                    <h3>Why Choose DriveX?</h3>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>No Hidden Charges</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Free Cancellation</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>24/7 Customer Support</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Unlimited Mileage</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Latest Models</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Airport Pickup</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Car Animation (SVG for better performance) -->
+            <div class="car-animation">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#ff4d30" width="100%" height="100%">
+                    <path d="M39.61 96c-11.11 0-21.07 6.74-25.21 17.02L0 160h512l-14.4-46.98C493.47 102.74 483.5 96 472.39 96H39.61zM0 192v272c0 26.51 21.49 48 48 48h52.78c26.51 0 48-21.49 48-48V192H0zm360 0v272c0 26.51 21.49 48 48 48h52.78c26.51 0 48-21.49 48-48V192H360zm-208 0v272c0 8.84 7.16 16 16 16h64c8.84 0 16-7.16 16-16V192H152z"/>
+                </svg>
+            </div>
+            
+            <!-- Dashboard design element -->
+            <div class="dashboard">
+                <div class="dash-item">
+                    <div class="dash-icon">⛽</div>
+                    <span>Fuel Options</span>
+                </div>
+                <div class="dash-item">
+                    <div class="dash-icon">🛡️</div>
+                    <span>Insurance</span>
+                </div>
+                <div class="dash-item">
+                    <div class="dash-icon">📍</div>
+                    <span>GPS</span>
+                </div>
+                <div class="dash-item">
+                    <div class="dash-icon">🔒</div>
+                    <span>Security</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pulsing CTA -->
+        <div class="cta-pulse">Special Offers!</div>
+        
+        <!-- Form Container -->
+        <div class="form-container">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h2 class="form-title">Rent Your Dream Car</h2>
+                    <p class="form-subtitle">Fill out the form below and we'll get back to you shortly</p>
+                </div>
+                
+                <form method="POST" action="#">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName" class="required">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactNumber" class="required">Contact Number</label>
+                            <input type="tel" id="contactNumber" name="contactNumber" placeholder="Enter your phone number" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pickupDate" class="required">Pickup Date</label>
+                            <input type="date" id="pickupDate" name="pickupDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="returnDate" class="required">Return Date</label>
+                            <input type="date" id="returnDate" name="returnDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pickupLocation" class="required">Pickup Location</label>
+                            <select id="pickupLocation" name="pickupLocation" required>
+                                <option value="" disabled selected>Select location</option>
+                                <option value="airport">Airport Terminal</option>
+                                <option value="downtown">Downtown Office</option>
+                                <option value="north">North Branch</option>
+                                <option value="east">East Branch</option>
+                                <option value="west">West Branch</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="carType" class="required">Car Type</label>
+                            <select id="carType" name="carType" required>
+                                <option value="" disabled selected>Select car type</option>
+                                <option value="economy">Economy</option>
+                                <option value="compact">Compact</option>
+                                <option value="suv">SUV</option>
+                                <option value="luxury">Luxury</option>
+                                <option value="convertible">Convertible</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" placeholder="Enter your complete address"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Driver's Age</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="age" value="under25" required>
+                                Under 25
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="age" value="25to65">
+                                25-65
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="age" value="over65">
+                                Over 65
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="specialRequests">Special Requests</label>
+                        <textarea id="specialRequests" name="specialRequests" placeholder="Any additional requirements or questions"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">RESERVE NOW</button>
+                    
+                    <div class="form-footer">
+                        <p>By submitting this form, you agree to our Terms of Service and Privacy Policy</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
